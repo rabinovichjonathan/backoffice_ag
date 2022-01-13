@@ -73,7 +73,7 @@ export default function Productos() {
   
   const handleSubmit = (e) =>{
         e.preventDefault();
-        if(!input){
+        if(!input.producto){
             alert("ingrese un producto por favor")
         }else{
           if(modoEdicion == false){
@@ -88,7 +88,7 @@ export default function Productos() {
               destacado: input.destacado,
               categoria_id: input.categoria_id
             }
-           console.log(input.categoria_id)
+            console.log(input.categoria_id);
             http.post("/productos", nuevoProducto)
             .then(res => {
               setInput({
@@ -143,7 +143,7 @@ export default function Productos() {
             })
             .catch(err => {
               if(err.response.status == 409){
-                alert("La categoria a ingresar ya existe. Intente con otro tipo de categoría")
+                alert("El producto a ingresar ya existe. Intente con otro tipo de producto")
 
               }else{
                 alert("ocurrió un error")
@@ -155,10 +155,20 @@ export default function Productos() {
   
   function mostrarModalInsertar(){
     setIsOpen(true);
+    setInput({
+      producto: '',
+      descripcion: '',
+      precio: '',
+      cantidad_unidades:'',
+      foto_producto: '',
+      destacado: 0,
+      categoria_id: categorias[0].categoria_id
+    });
   }
   
   function ocultarModalInsertar(){
-      setIsOpen(false);
+    
+    setIsOpen(false);
   }
   function mostrarModalEditar(){
     setModoEdicion(true);
@@ -262,7 +272,7 @@ export default function Productos() {
                   
                   <FormGroup>
                       <label>Precio:</label>
-                      <input className='form-control' type='number' name='precio'  onChange={handleChange}/>
+                      <input className='form-control' type='number' name='precio' required  onChange={handleChange}/>
                   </FormGroup>
                   <FormGroup>
                       <label>Descripción:</label>
@@ -278,8 +288,8 @@ export default function Productos() {
                   </FormGroup>
                   <FormGroup>
                       <label>Categoria: </label> 
-                      <select name="categoria_id" value={input.categoria_id} onChange={handleChange}>
-                        <option selected>Open this select menu</option>
+                      <select name="categoria_id" value={input.categoria_id}  onChange={handleChange}>
+                        {/*<option selected>Abre este menu de selección</option>*/}
                         {categorias.map((categoria)=>(
                          
                         <option value={categoria.categoria_id}>{categoria.categoria}</option>

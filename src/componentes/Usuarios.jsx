@@ -52,8 +52,8 @@ function Usuarios() {
       }
     const handleSubmit = (e) =>{
         e.preventDefault();
-        if(!input){
-            alert("ingrese una usuario por favor")
+        if(!input.usuario){
+            alert("ingrese un usuario por favor")
         }else{
           if(modoEdicion == false){
             const nuevaUsuario = { 
@@ -73,7 +73,7 @@ function Usuarios() {
             })
             .catch(err => {
               if(err.response.status == 409){
-                alert("La usuario a ingresar ya existe. Intente con otro tipo de categoría")
+                alert("El usuario a ingresar ya existe. Intente con otro tipo de usuario")
 
               }else{
                 alert("ocurrió un error")

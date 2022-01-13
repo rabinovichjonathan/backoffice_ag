@@ -57,7 +57,7 @@ import http from "../http-common";
       }
     const handleSubmit = (e) =>{
         e.preventDefault();
-        if(!input){
+        if(!input.categoria){
             alert("ingrese una categoria por favor")
         }else{
           if(modoEdicion == false){
