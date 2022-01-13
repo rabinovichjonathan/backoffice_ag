@@ -8,3 +8,7 @@
   .main-header{
     font-family: 'Montserrat', sans-serif;
   }
+  .contenedor_logo_titulo img{
+    height:20%;
+    width:20%;
+  }

@@ -52,4 +52,14 @@
 input{
     margin: 15px;
 }
+.contenedor_botones{
+    margin-top: 2%;
+    display: flex;
+}
+
+.contenedor_botones a{
+    margin-left:2%;
+   
+}
+
  

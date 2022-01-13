@@ -11,43 +11,38 @@ import http from "../http-common";
 
 
 
-
-
-
-
-
-
- function Categorias() {
+function Usuarios() {
    
   const [isOpen, setIsOpen] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [id, setId] = useState('');
- // const [categoria, setCategoria] = useState('');
+ // const [usuario, setUsuario] = useState('');
   
-  const [categorias, setCategorias] = useState([]);
-   /* {categoria_id:shortid.generate(), categoria: "salados" },
-  {categoria_id:shortid.generate(), categoria: "dulces" }*/
+  const [usuarios, setUsuarios] = useState([]);
+   /* {usuario_id:shortid.generate(), usuario: "salados" },
+  {usuario_id:shortid.generate(), usuario: "dulces" }*/
 
   
     
 /*      useEffect(() => {
-        traerCategorias();
+        traerUsuarios();
     }, [])
 */
- const traerCategorias = async () => {
-    const response = await http.get("/categorias");
+ const traerUsuarios = async () => {
+    const response = await http.get("/usuarios");
     
-    setCategorias(response.data);
+    setUsuarios(response.data);
     
     
   }
 
   useEffect(() => {
-    traerCategorias();
+    traerUsuarios();
   },[]);
 
   const [input, setInput] = useState({
-    categoria:''
+    usuario:'',
+    clave:''
   });
       const handleChange = (e) =>{
           setInput({...input,
@@ -58,25 +53,27 @@ import http from "../http-common";
     const handleSubmit = (e) =>{
         e.preventDefault();
         if(!input){
-            alert("ingrese una categoria por favor")
+            alert("ingrese una usuario por favor")
         }else{
           if(modoEdicion == false){
-            const nuevaCategoria = { 
-              //categoria_id: shortid.generate(),
-              categoria: input.categoria
+            const nuevaUsuario = { 
+              //usuario_id: shortid.generate(),
+              usuario: input.usuario,
+              clave: input.clave
             }
             
-            http.post("/categorias", nuevaCategoria)
+            http.post("/usuarios", nuevaUsuario)
             .then(res => {
               setInput({
-                categoria:''
+                usuario:'',
+                clave: ''
               });
               ocultarModalInsertar()
-              traerCategorias(); 
+              traerUsuarios(); 
             })
             .catch(err => {
               if(err.response.status == 409){
-                alert("La categoria a ingresar ya existe. Intente con otro tipo de categoría")
+                alert("La usuario a ingresar ya existe. Intente con otro tipo de categoría")
 
               }else{
                 alert("ocurrió un error")
@@ -90,27 +87,29 @@ import http from "../http-common";
             
                        
           }else{
-              //const guardarCategoriaEditada = async (e) =>{
+              //const guardarUsuarioEditada = async (e) =>{
                  
-                const categoriaAeditar = {
+                const usuarioAeditar = {
                     
-                    categoria: input.categoria
+                    usuario: input.usuario,
+                    clave: input.clave
                 }
                 
-                 http.put(`/categorias/${id}`, categoriaAeditar)
+                 http.put(`/usuarios/${id}`, usuarioAeditar)
                  .then(res => {
                   setInput({
-                    categoria:''
+                    usuario:'',
+                    clave: ''
                   });
                   setModoEdicion(false);
             
                   setId('');
                   ocultarModalEditar();
-                  traerCategorias();
+                  traerUsuarios();
                 })
                 .catch(err => {
                   if(err.response.status == 409){
-                    alert("La categoria a ingresar ya existe. Intente con otro tipo de categoría")
+                    alert("La usuario a ingresar ya existe. Intente con otro tipo de categoría")
     
                   }else{
                     alert("ocurrió un error")
@@ -130,50 +129,51 @@ import http from "../http-common";
         } 
       }  
       
-     /* const eliminarCategoria = id => {
+     /* const eliminarUsuario = id => {
       
-          const categoriasFiltradas = categorias.filter(categoria => categoria.categoria_id !== id);
-          const categoriaAborrar = categorias.filter(categoria => categoria.categoria_id === id);
-          console.log(categoriaAborrar.categoria);
+          const usuariosFiltradas = usuarios.filter(usuario => usuario.usuario_id !== id);
+          const usuarioAborrar = usuarios.filter(usuario => usuario.usuario_id === id);
+          console.log(usuarioAborrar.usuario);
 
           
-           http.delete(`/categorias/${categoriaAborrar.categoria_id}`);
-          setCategorias(categoriasFiltradas);
+           http.delete(`/usuarios/${usuarioAborrar.usuario_id}`);
+          setUsuarios(usuariosFiltradas);
          
       } */
-      const eliminarCategoria = async (id) => {
+      const eliminarUsuario = async (id) => {
         
-        //const categoriasFiltradas = categorias.filter(categoria => categoria.categoria_id !== id);
+        //const usuariosFiltradas = usuarios.filter(usuario => usuario.usuario_id !== id);
        
-        await http.delete(`/categorias/${id}`);
-        traerCategorias();
+        await http.delete(`/usuarios/${id}`);
+        traerUsuarios();
         
       }
       
 
-      const editarCategoria = categoria => {
+      const editarUsuario = usuario => {
         setInput({
-          categoria: categoria.categoria
+          usuario: usuario.usuario,
+          clave: usuario.clave
         })
          
         setModoEdicion(true);
-        setId(categoria.categoria_id);
+        setId(usuario.usuario_id);
         
      } 
-     /*const guardarCategoria = (e) => {
+     /*const guardarUsuario = (e) => {
       /*e.preventDefault()
-      if(!categoria){
+      if(!usuario){
           alert("ingrese una categoría por favor")
           return;
       } 
       */
-    /*  const categoriasEditadas = categorias.map(item => item.id === id ? {id, categoria: categoria}: item)
-      setCategorias(categoriasEditadas);
+    /*  const usuariosEditadas = usuarios.map(item => item.id === id ? {id, usuario: usuario}: item)
+      setUsuarios(usuariosEditadas);
      
       
     
       setModoEdicion(false);
-      setCategoria('');
+      setUsuario('');
       setId('');
       ocultarModalEditar();*/
    //} 
@@ -203,23 +203,23 @@ import http from "../http-common";
       
         <Container>
           <br /> 
-          <Button color="success" onClick={mostrarModalInsertar}>Insertar nueva categoría de producto</Button>
+          <Button color="success" onClick={mostrarModalInsertar}>Insertar nuevo usuario</Button>
           <br /><br /> 
           <Table>
             <thead><tr><th>Id</th>
-            <th>Categorias</th>
+            <th>Usuarios</th>
             <th>Acciones</th>
             
             </tr></thead>
            
               <tbody>
-                {categorias.map((categoria)=>(
-                  <tr key={categoria.categoria_id}>
-                    <td>{categoria.categoria_id}</td>
-                    <td>{categoria.categoria}</td>
+                {usuarios.map((usuario)=>(
+                  <tr key={usuario.usuario_id}>
+                    <td>{usuario.usuario_id}</td>
+                    <td>{usuario.usuario}</td>
                     
-                    <td><Button color='primary' onClick={() => { editarCategoria(categoria) }}>Editar</Button>{"  "}
-                    <Button color='danger' onClick={() => { eliminarCategoria(categoria.categoria_id) }}>Eliminar</Button></td>
+                    <td><Button color='primary' onClick={() => { editarUsuario(usuario) }}>Editar</Button>{"  "}
+                    <Button color='danger' onClick={() => { eliminarUsuario(usuario.usuario_id) }}>Eliminar</Button></td>
                   </tr>
                 ))}
 
@@ -234,7 +234,7 @@ import http from "../http-common";
              <div> 
                 {
                 
-               modoEdicion===true ? <h2>modificar Categoría</h2> : <h2>Ingresa una nueva Categoría</h2>
+               modoEdicion===true ? <h2>modificar Usuario</h2> : <h2>Ingresa un nuevo usuario</h2>
                 }
              </div>
           </ModalHeader>
@@ -244,8 +244,12 @@ import http from "../http-common";
                 
              </FormGroup>
              <FormGroup>
-               <label>Categoria:</label>
-                <input className='form-control' type='text' name="categoria" value={input.categoria} onChange={handleChange} />
+               <label>Usuario:</label>
+                <input className='form-control' type='text' name="usuario" value={input.usuario} onChange={handleChange} />
+             </FormGroup>
+             <FormGroup>
+               <label>Clave:</label>
+                <input className='form-control' type='password' name="clave" value={input.clave} onChange={handleChange} />
              </FormGroup>
              <FormGroup>
 
@@ -269,15 +273,19 @@ import http from "../http-common";
        <Modal isOpen = {modoEdicion}>
           <ModalHeader>
              <div> 
-                <h2>Modifica la Categoría</h2>
+                <h2>Modifica el usuario</h2>
              </div>
           </ModalHeader>
           <ModalBody>
              
              <FormGroup onSubmit={handleSubmit}>
-                <label>Categoria:</label>
-                <input className='form-control' type='text' name="categoria" value={input.categoria} onChange={handleChange}/>
+                <label>Usuario:</label>
+                <input className='form-control' type='text' name="usuario" value={input.usuario} onChange={handleChange}/>
                 
+             </FormGroup>
+             <FormGroup>
+               <label>Clave:</label>
+                <input className='form-control' type='password' name="clave" value={input.clave} onChange={handleChange} />
              </FormGroup>
             
           </ModalBody>
@@ -294,4 +302,4 @@ import http from "../http-common";
   
   }  
 
-export default Categorias;
+export default Usuarios;

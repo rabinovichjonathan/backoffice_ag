@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './estilos/Login.css';
 import PropTypes from 'prop-types';
+import http from "../http-common";
 
 async function loginUser(credentials) {
-  return fetch('http://localhost:8080/login', {
+/*
+  return fetch('http://localhost:8082/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -11,6 +13,17 @@ async function loginUser(credentials) {
     body: JSON.stringify(credentials)
   })
     .then(data => data.json())
+  */
+    return http.post("/usuarios/login", credentials)
+    .then(data => data.data)
+    .catch(err => {
+      if(err.response.status == 401){
+        alert("Usuario o clave incorrecto")
+      }else{
+        alert("ocurrió un error")
+      }
+      return false;
+    });
  }
 
 export default function Login({ setToken }) {
@@ -20,16 +33,24 @@ export default function Login({ setToken }) {
   const handleSubmit = async e => {
     e.preventDefault();
     const token = await loginUser({
-      username,
-      password
+      usuario: username,
+      clave: password
     });
-    setToken(token);
+    if(token){
+      console.log(token)
+      setToken(token);
+    }
   }
   return(
     <div>
+         
          <div className="container login-container">
             <div className="row">
                 <div className="col-md-6 login-form-1">
+                  <div class="contenedor_logo_titulo">
+                    <img src="./logo_antojo_gambeta.jpeg"></img>
+                    <h3>Antojo y Gambeta BackOffice (administrador de contenidos)</h3>
+                  </div>  
                   <h3>Ingreso</h3>
                   <form onSubmit={handleSubmit}>
                         <div className="form-group">
